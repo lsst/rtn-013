@@ -1,0 +1,58 @@
+\section{Introduction}
+
+We need a workflow system and production tools which can process DESC DC2 for DP0.2. Nominally the processing starts in June 2021.
+We have a milestone L3-MW-0050 in March (Jira ticket PREOPS-88) for Batch system installation and configurations on IDF.
+The preferable way to do this would be with BPS in front of PanDA but there are potentially other solutions (see \secref{sec:potential}).
+SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic..
+This is separate from the construction side's HSC reprocessing at NCSA for development needs. The  constructions team at NCSA can continue to use Condor-based BPS for the biweekly HSC reprocessing at NCSA.
+Getting this in place requires some leadership and decision making. We need a product owner - preferable Rubin Execution Team and/or SLAC based.
+
+
+
+\section {Requirements and priories}
+\citeds{LDM-636} forms the formal requirements baseline.
+
+\begin{itemize}
+\item Restart: Can resume an unfinished workflow. Can automatically retry jobs killed by preemption, DB connection, or other transient issues.
+\item Logstash: On IDF this will be Google Logging.
+\item Troubleshooting failed jobs: Features to help understand non-transient failures, such as error messages aggregation and ways to reproduce failures. This kind of error usually is caused by pipeline failures and needs follow-up investigation.
+\item Workflow monitoring
+\item Campaign monitoring
+\end{itemize}
+
+\subsection{PanDA}
+PanDA ticks a bunch of boxes:
+\begin{itemize}
+\item Multi-site authentication
+\item Multi-site processing - Harvester can be used to mitigate network traffic between sites and central workflow db; also handles site-specific submission properties allowing a range of different kinds of resources
+\item Manages workflow (via iDDS) as well as workload
+\item Good monitoring tools for the submitted workflow. Can be customized.
+\end{itemize}
+
+Campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
+
+
+\section {Execution team }
+
+
+\section {Potential solutions} \label{sec:potential}
+
+Conceptually this is done in two steps: (a) workflow generation and (b) job execution.
+In step (a) the workflow generation defines executable jobs and job interdependency as a graph.
+In step (b) job execution includes workflow status monitoring, pausing/resuming/killing workflows, debugging/retrying failed jobs, resource usage monitoring, and relevant toolkits to facilitate execution management on a large scale.
+\begin{enumerate}
+\item  ctrl\_bps workflow generation + PanDA-plugin execution tools developed by BNL
+\item ctrl\_bps workflow generation + Condor-plugin execution tools developed by NCSA
+\item ctrl\_bps workflow generation + Pegasus as the execution tools
+\item ctrl\_bps workflow generation tools can't work on IDF, one can use customized scripts to generate workflow for any execution tools.
+\end{enumerate}
+
+
+
+\section {Risks and worries}
+
+\begin{enumerate}
+\item Lack of documentation for PanDA .. we have 12 years of this ..\label{i:nodoc}
+\item Being dependent on BNL because of \ref{i:nodoc}
+\item Having a LOT of scripting to make a production run of any size
+\end{enumerate}
