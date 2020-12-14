@@ -7,7 +7,8 @@ SLAC obviously have long term interest in this working and on a single track so 
 This is separate from the construction side's HSC reprocessing at NCSA for development needs. The  constructions team at NCSA can continue to use Condor-based BPS for the biweekly HSC reprocessing at NCSA.
 Getting this in place requires some leadership and decision making. We need a product owner - preferable Rubin Execution Team and/or SLAC based.
 
-
+How effective these tools are will determine how effort-intensive (and
+successful) the large-scale processing campaigns will be.
 
 \section {Requirements and priories}
 \citeds{LDM-636} forms the formal requirements baseline.
@@ -21,7 +22,7 @@ Getting this in place requires some leadership and decision making. We need a pr
 \end{itemize}
 
 \subsection{PanDA}
-PanDA ticks a bunch of boxes:
+PanDA satisfies a number of criteria:
 \begin{itemize}
 \item Multi-site authentication
 \item Multi-site processing - Harvester can be used to mitigate network traffic between sites and central workflow db; also handles site-specific submission properties allowing a range of different kinds of resources
@@ -29,7 +30,20 @@ PanDA ticks a bunch of boxes:
 \item Good monitoring tools for the submitted workflow. Can be customized.
 \end{itemize}
 
-Campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
+While support would be dependent on BNL expertise, several
+installations of PanDA have been undertaken outside of ATLAS, so there
+is experience in doing installs and of ongoing maintenance for other
+organizations.
+
+In order to demonstrate the viabilty and customizability of PanDA for
+Rubin, BNL has set a target of doing processing with PanDA in the IDF
+by the March 2021 timeframe. As a part of that demonstration, they
+will provide documentation of the PanDA system.
+
+It would be additionally instructive to set up multi-site processing
+to include the French Data Facility and US Data Facility during 2021.
+
+However, campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
 
 
 \section {Execution team }
