@@ -13,12 +13,20 @@ successful) the large-scale processing campaigns will be.
 \section {Requirements and priories}
 \citeds{LDM-636} forms the formal requirements baseline.
 
-\begin{itemize}
+Concisely we need the execution team to be able to run DP0.2 with minimum hand holding.
+Hence the top priorities for the near term would be:
+\begin{enumerate}
+\item Documentation: preferably on lsst.io, enough for the execution team to kick off pipelines,  monitor and to first order troubleshoot them.
+\item Workflow monitoring - some sort of web page which gives status (perhaps slightly customized)
 \item Restart: Can resume an unfinished workflow. Can automatically retry jobs killed by preemption, DB connection, or other transient issues.
-\item Logstash: On IDF this will be Google Logging.
+\item Logstash: On IDF this will be Google Logging. Any logging should end up in the same central logging system.
 \item Troubleshooting failed jobs: Features to help understand non-transient failures, such as error messages aggregation and ways to reproduce failures. This kind of error usually is caused by pipeline failures and needs follow-up investigation.
-\item Workflow monitoring
-\item Campaign monitoring
+\end{enumerate}
+Longer term (which may not be for DP0.2)we need
+\begin{itemize}
+\item Installation at SLAC
+\item Multi site execution with France and eventually UK.
+\item Campaign execution monitoring
 \end{itemize}
 
 \subsection{PanDA}
@@ -45,9 +53,9 @@ installations of PanDA have been undertaken outside of ATLAS, so there
 is experience in doing installs and of ongoing maintenance for other
 organizations.
 
-In order to demonstrate the viabilty and customizability of PanDA for
+In order to demonstrate the viability and customizability of PanDA for
 Rubin, BNL has set a target of doing processing with PanDA in the IDF
-by the March 2021 timeframe. As a part of that demonstration, they
+by the March 2021 time frame. As a part of that demonstration, they
 will provide documentation of the PanDA system.
 
 It would be additionally instructive to set up multi-site processing
@@ -56,7 +64,16 @@ to include the French Data Facility and US Data Facility during 2021.
 However, campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
 
 
-\section {Execution team }
+\section {Team }
+ Currently (all at partial fractions) the team consists of:
+\begin{itemize}
+\item Brian Yanny and team at FERMILAB for execution
+\item Monica Adamow - Execution NCSA
+\item Michelle Gower, Mikolaj Kowalik  - BPS and deployment
+\item Sergey Padowski and Shuwei Ye (starting in January)- PanDA
+
+
+\end{itemize}
 
 
 \section {Potential solutions} \label{sec:potential}
