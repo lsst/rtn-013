@@ -48,7 +48,7 @@ meta.tex: Makefile .FORCE
 	printf '\\newcommand{\\vcsDate}{$(GITDATE)}\n' >>$@
 
 
-milestones.tex: 
+milestones.tex: .FORCE
 	( \
 	source operations_milestones/venv/bin/activate; \
 	python operations_milestones/opsMiles.py -l -u ${USER} -q " and component = 'Data Production' and team = 'Science Users Middleware'" -c "FY21 Middleware Milestones"; \
