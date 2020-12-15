@@ -1,18 +1,19 @@
 \section{Introduction}
 
 We need a workflow system and production tools which can process DESC DC2 for DP0.2. Nominally the processing starts in June 2021.
-We have a milestone L3-MW-0050 in March (Jira ticket PREOPS-88) for Batch system installation and configurations on IDF.
+We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
 The preferable way to do this would be with BPS in front of PanDA but there are potentially other solutions (see \secref{sec:potential}).
-SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic..
+SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic.
 This is separate from the construction side's HSC reprocessing at NCSA for development needs. The  constructions team at NCSA can continue to use Condor-based BPS for the biweekly HSC reprocessing at NCSA.
+However for PREOPS we should focus on PanDA in the near term get all the hooks in place and make it work for DP0.2.
 Getting this in place requires some leadership and decision making. We need a product owner - preferable Rubin Execution Team and/or SLAC based.
 
 How effective these tools are will determine how effort-intensive (and
 successful) the large-scale processing campaigns will be.
 
-\subsection{Milesotnes}
+\subsection{Milestones}
 General DP0 information is  \citeds{RTN-001}. For simplicity some  milestones
-are copied here in \tabref{tab:miles}. Jira is the source of truth for dates on these.
+are copied here in \tabref{tab:miles}. Jira is the source of truth for dates on these though some may need revising.
 \input{milestones}
 
 \section {Requirements and priories}
@@ -33,6 +34,14 @@ Longer term (which may not be for DP0.2)we need
 \item Multi site execution with France and eventually UK.
 \item Campaign execution monitoring
 \end{itemize}
+
+\subsection{Timeline}
+We should track two milestones for this L3-MW-0050 for an initial system and L3-MW-0060 to
+have the system to run DP0.2.
+
+\subsection{Evaluation}
+L3-MW-0060 will see the commencement of the processing run - we assume there may be some
+hiccups  at that point. But at L3-MW-0060 + one month we should decide if this is the long term approach for Rubin Operations with DOE buy in.
 
 \subsection{PanDA}
 
