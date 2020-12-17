@@ -1,0 +1,120 @@
+\section{Introduction}
+
+We need a workflow system and production tools which can process DESC DC2 for DP0.2. Nominally the processing starts in June 2021.
+We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
+The preferable way to do this would be with BPS in front of PanDA but there are potentially other solutions (see \secref{sec:potential}).
+
+For PREOPS we should focus on PanDA in the near term get all the hooks in place and make it work for DP0.2.
+Getting this in place requires some leadership and decision making. We need a product owner and manager  (see \secref{sec:team}).
+This is separate from the construction side's HSC reprocessing at NCSA for development needs. The  constructions team at NCSA can continue to use Condor-based BPS for the biweekly HSC reprocessing at NCSA.
+
+How effective these tools are will determine how effort-intensive (and successful) the large-scale processing campaigns will be.
+
+
+\subsection{Milestones}
+General DP0 information is  \citeds{RTN-001}. For simplicity some  milestones
+are copied here in \tabref{tab:miles}. Jira is the source of truth for dates on these though some may need revising.
+\input{milestones}
+
+\section {Requirements and priories}
+\citeds{LDM-636} forms the formal requirements baseline.
+
+Concisely we need the execution team to be able to run DP0.2 with minimum hand holding.
+Hence the top priorities for the near term would be:
+\begin{enumerate}
+\item Documentation: preferably on lsst.io, enough for the execution team to kick off pipelines,  monitor and to first order troubleshoot them.
+\item Workflow monitoring - some sort of web page which gives status (perhaps slightly customized)
+\item Restart: Can resume an unfinished workflow. Can automatically retry jobs killed by preemption, DB connection, or other transient issues.
+\item Logstash: On IDF this will be Google Logging. Any logging should end up in the same central logging system.
+\item Troubleshooting failed jobs: Features to help understand non-transient failures, such as error messages aggregation and ways to reproduce failures. This kind of error usually is caused by pipeline failures and needs follow-up investigation.
+\end{enumerate}
+Longer term (which may not be for DP0.2)we need
+\begin{itemize}
+\item Installation at SLAC
+\item Multi site execution with France and eventually UK.
+\item Campaign execution monitoring
+\end{itemize}
+
+\subsection{Timeline}
+We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
+We should track these two milestones: L3-MW-0050 for an initial system and L3-MW-0060 to
+have the system to run DP0.2.
+
+\subsection{Evaluation}
+L3-MW-0060 will see the commencement of the processing run - we assume there may be some
+hiccups  at that point. But at L3-MW-0060 + one month we should decide if this is the long term approach for Rubin Operations with DOE buy in.
+Hence L3-MW-0040 is approximately the evaluation date.
+
+\section {Team }\label{sec:team}
+SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic.
+A product owner to shepherd requirements and priorities as well as  a manager to guide resources must be identified.
+ Currently (all at partial fractions) the team consists of:
+\begin{itemize}
+\item Brian Yanny and team at FERMILAB for execution
+\item Monica Adamow - Execution NCSA
+\item Michelle Gower, Mikolaj Kowalik  - BPS and deployment
+\item Sergey Padowski and Shuwei Ye (starting in January)- PanDA
+\end{itemize}
+
+\section{PanDA}
+
+The PanDA (``Processing and Data Analysis'') system was created by
+ATLAS at LHC to manage its massive processing efforts. In that
+capacity it handles several hundred thousand processing jobs per day
+across heterogeneous systems, supporting multiple parallel
+campaigns. Its main services (PanDA, Harvester, iDDS) are driven from
+a central database. The system can ingest DAGs, handle the workflow
+and then the workload management. Currently PanDA cannot rerun parts
+of workflow, but the feature is being actively considered for addition.
+
+PanDA satisfies a number of criteria:
+\begin{itemize}
+\item Multi-site authentication
+\item Multi-site processing - Harvester can be used to mitigate network traffic between sites and central workflow db; also handles site-specific submission properties allowing a range of different kinds of resources
+\item Manages workflow (via iDDS) as well as workload
+\item Good monitoring tools for the submitted workflow. Can be customized.
+\end{itemize}
+
+While support would be dependent on BNL expertise, several
+installations of PanDA have been undertaken outside of ATLAS, so there
+is experience in doing installs and of ongoing maintenance for other
+organizations.
+
+In order to demonstrate the viability and customizability of PanDA for
+Rubin, BNL has set a target of doing processing with PanDA in the IDF
+by the March 2021 time frame. As a part of that demonstration, they
+will provide documentation of the PanDA system.
+
+It would be additionally instructive to set up multi-site processing
+to include the French Data Facility and US Data Facility during 2021.
+
+However, campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
+
+
+
+
+\section {Potential solutions} \label{sec:potential}
+
+Conceptually this is done in two steps: (a) workflow generation and (b) job execution.
+In step (a) the workflow generation defines executable jobs and job interdependency as a graph.
+In step (b) job execution includes workflow status monitoring, pausing/resuming/killing workflows, debugging/retrying failed jobs, resource usage monitoring, and relevant toolkits to facilitate execution management on a large scale.
+\begin{enumerate}
+\item  ctrl\_bps workflow generation + PanDA-plugin execution tools developed by BNL
+\item ctrl\_bps workflow generation + Condor-plugin execution tools developed by NCSA
+\item ctrl\_bps workflow generation + Pegasus as the execution tools
+\item ctrl\_bps workflow generation tools can't work on IDF, one can use customized scripts to generate workflow for any execution tools.
+\end{enumerate}
+
+
+
+\section {Risks and worries}
+
+\begin{enumerate}
+\item Lack of documentation for PanDA: it is a complex system and will
+  be the heart of processing.. operating for 12 years in this mode is unwise.\label{i:nodoc}
+\item Dependence on an institution or individual because of
+  \ref{i:nodoc}, also suggests the need to spread the expertise more
+  broadly across the team.
+\item Having a LOT of scripting to make a production run of any size
+\item dependence on Oracle: is an open source project would you not like to depend on commercial products furthermore some of us have had bad experience with Oracle.
+\end{enumerate}

@@ -46,3 +46,11 @@ meta.tex: Makefile .FORCE
 	printf '\\newcommand{\\lsstDocNum}{$(DOCNUMBER)}\n' >>$@
 	printf '\\newcommand{\\vcsRevision}{$(GITVERSION)$(GITDIRTY)}\n' >>$@
 	printf '\\newcommand{\\vcsDate}{$(GITDATE)}\n' >>$@
+
+
+milestones.tex:
+	( \
+	source operations_milestones/venv/bin/activate; \
+	python operations_milestones/opsMiles.py -l -u ${USER} -q " and component = 'Data Production' and team = 'Science Users Middleware'" -c "FY21 Middleware Milestones"; \
+	)
+	
