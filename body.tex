@@ -3,13 +3,14 @@
 We need a workflow system and production tools which can process DESC DC2 for DP0.2. Nominally the processing starts in June 2021.
 We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
 The preferable way to do this would be with BPS in front of PanDA but there are potentially other solutions (see \secref{sec:potential}).
-SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic.
-This is separate from the construction side's HSC reprocessing at NCSA for development needs. The  constructions team at NCSA can continue to use Condor-based BPS for the biweekly HSC reprocessing at NCSA.
-However for PREOPS we should focus on PanDA in the near term get all the hooks in place and make it work for DP0.2.
-Getting this in place requires some leadership and decision making. We need a product owner - preferable Rubin Execution Team and/or SLAC based.
 
-How effective these tools are will determine how effort-intensive (and
-successful) the large-scale processing campaigns will be.
+For PREOPS we should focus on PanDA in the near term get all the hooks in place and make it work for DP0.2.
+Getting this in place requires some leadership and decision making. We need a product owner and manager.
+See \secref{sec:team}.
+This is separate from the construction side's HSC reprocessing at NCSA for development needs. The  constructions team at NCSA can continue to use Condor-based BPS for the biweekly HSC reprocessing at NCSA.
+
+How effective these tools are will determine how effort-intensive (and successful) the large-scale processing campaigns will be.
+
 
 \subsection{Milestones}
 General DP0 information is  \citeds{RTN-001}. For simplicity some  milestones
@@ -36,14 +37,27 @@ Longer term (which may not be for DP0.2)we need
 \end{itemize}
 
 \subsection{Timeline}
-We should track two milestones for this L3-MW-0050 for an initial system and L3-MW-0060 to
+We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
+We should track these two milestones: L3-MW-0050 for an initial system and L3-MW-0060 to
 have the system to run DP0.2.
 
 \subsection{Evaluation}
 L3-MW-0060 will see the commencement of the processing run - we assume there may be some
 hiccups  at that point. But at L3-MW-0060 + one month we should decide if this is the long term approach for Rubin Operations with DOE buy in.
+Hence L3-MW-0040 is approximately the evaluation date.
 
-\subsection{PanDA}
+\section {Team }\label{sec:team}
+SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic.
+A product owner to shepherd requirements and priorities as well as  a manager to guide resources must be identified.
+ Currently (all at partial fractions) the team consists of:
+\begin{itemize}
+\item Brian Yanny and team at FERMILAB for execution
+\item Monica Adamow - Execution NCSA
+\item Michelle Gower, Mikolaj Kowalik  - BPS and deployment
+\item Sergey Padowski and Shuwei Ye (starting in January)- PanDA
+\end{itemize}
+
+\section{PanDA}
 
 The PanDA (``Processing and Data Analysis'') system was created by
 ATLAS at LHC to manage its massive processing efforts. In that
@@ -78,16 +92,6 @@ to include the French Data Facility and US Data Facility during 2021.
 However, campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
 
 
-\section {Team }
- Currently (all at partial fractions) the team consists of:
-\begin{itemize}
-\item Brian Yanny and team at FERMILAB for execution
-\item Monica Adamow - Execution NCSA
-\item Michelle Gower, Mikolaj Kowalik  - BPS and deployment
-\item Sergey Padowski and Shuwei Ye (starting in January)- PanDA
-
-
-\end{itemize}
 
 
 \section {Potential solutions} \label{sec:potential}
@@ -113,4 +117,5 @@ In step (b) job execution includes workflow status monitoring, pausing/resuming/
   \ref{i:nodoc}, also suggests the need to spread the expertise more
   broadly across the team.
 \item Having a LOT of scripting to make a production run of any size
+\item dependence on Oracle: is an open source project would you not like to depend on commercial products furthermore some of us have had bad experience with Oracle.
 \end{enumerate}
