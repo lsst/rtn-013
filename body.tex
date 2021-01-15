@@ -27,16 +27,17 @@ Hence the top priorities for the near term would be:
 \item Restart: Can resume an unfinished workflow. Can automatically retry jobs killed by preemption, DB connection, or other transient issues.
 \item Logstash: On IDF this will be Google Logging. Any logging should end up in the same central logging system.
 \item Troubleshooting failed jobs: Features to help understand non-transient failures, such as error messages aggregation and ways to reproduce failures. This kind of error usually is caused by pipeline failures and needs follow-up investigation.
+\item This first version could be on Google only, though IN2P3 would be a good bonus.  It is understood this may use DOMA @ CERN but we assume BNL clear that with CERN.
 \end{enumerate}
 Longer term (which may not be for DP0.2)we need
 \begin{itemize}
 \item Installation at SLAC
-\item Multi site execution with France and eventually UK.
+\item Multi site execution with France and eventually UK as well as SLAC.
 \item Campaign execution monitoring
 \end{itemize}
 
 \subsection{Timeline}
-We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
+We have a milestone L3-MW-0050 in March (see \tabref{tab:miles}) for Batch system installation, documentation and configurations on IDF and L3-MW-0060 for the DP0.2 production.
 We should track these two milestones: L3-MW-0050 for an initial system and L3-MW-0060 to
 have the system to run DP0.2.
 
@@ -44,6 +45,8 @@ have the system to run DP0.2.
 L3-MW-0060 will see the commencement of the processing run - we assume there may be some
 hiccups  at that point. But at L3-MW-0060 + one month we should decide if this is the long term approach for Rubin Operations with DOE buy in.
 Hence L3-MW-0040 is approximately the evaluation date.
+
+Should the evaluation be positive the next phase would include setting up the back end at SLAC.
 
 \section {Team }\label{sec:team}
 SLAC obviously have long term interest in this working and on a single track so it would be good to have some SLAC oversight on the topic.
@@ -53,14 +56,14 @@ A product owner to shepherd requirements and priorities as well as  a manager to
 \item Brian Yanny and team at FERMILAB for execution
 \item Monica Adamow - Execution NCSA
 \item Michelle Gower, Mikolaj Kowalik  - BPS and deployment
-\item Sergey Padowski and Shuwei Ye (starting in January)- PanDA
+\item Sergey Padolski and Shuwei Ye (starting in January)- PanDA
 \end{itemize}
 
 \section{PanDA}
 
 The PanDA (``Processing and Data Analysis'') system was created by
 ATLAS at LHC to manage its massive processing efforts. In that
-capacity it handles several hundred thousand processing jobs per day
+capacity it handles  around a million  processing jobs per day
 across heterogeneous systems, supporting multiple parallel
 campaigns. Its main services (PanDA, Harvester, iDDS) are driven from
 a central database. The system can ingest DAGs, handle the workflow
@@ -90,6 +93,16 @@ to include the French Data Facility and US Data Facility during 2021.
 
 However, campaign management is outside PanDA’s scope, so a layer on ctrl\_bps would be needed to chunk up and keep track of elements of a campaign. Ctrl\_bps would likely also need to handle resubmissions.
 
+\subsection{PanDA backend}
+PanDA began as a MySQL based system at BNL. It was switched to Oracle at ATLAS/CERN insistence when it was adopted by ATLAS and relocated to CERN in $\approx$2006. Since then PanDA has benefited from collaborative work with ATLAS Oracle experts to optimize and tune it as its usage and capabilities have grown to smoothly support DB-intensive tasks such as managing >1M concurrent jobs and fine grained processing.
+PanDA’s DB interfaces are agnostic to the RDBMS back end; it is able to work with other back ends, e.g. a MySQL instance has operated in Amazon EC2 for many years.
+The issues in using a non-Oracle back end
+\begin{enumerate}
+	\item tuning and
+	\item production use of recent code/capability
+\end{enumerate}
+Tuning: while not an issue for relatively small scale usage, if operational scale approaches that of ATLAS (as Rubin’s will), DB tuning and optimization is important. Dedicated effort and expertise for the chosen back end will be required.
+Production use of recent code/capability: PanDA is under active development, and Rubin’s use cases leverage recent/current developments, e.g. iDDS. That development takes place with Oracle as the back end. In order to promptly use new developments against another back end, an expert on that back end would need to work hand in hand with the developers to test, debug, tune and validate the new functionality.
 
 
 
