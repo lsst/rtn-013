@@ -104,6 +104,90 @@ The issues in using a non-Oracle back end
 Tuning: while not an issue for relatively small scale usage, if operational scale approaches that of ATLAS (as Rubin’s will), DB tuning and optimization is important. Dedicated effort and expertise for the chosen back end will be required.
 Production use of recent code/capability: PanDA is under active development, and Rubin’s use cases leverage recent/current developments, e.g. iDDS. That development takes place with Oracle as the back end. In order to promptly use new developments against another back end, an expert on that back end would need to work hand in hand with the developers to test, debug, tune and validate the new functionality.
 
+\subsubsection{Oracle features used by PanDA}
+SLAC, via Stanford, has free use of Oracle but with a given standard feature set. Oracle charges through the nose for additional features. Could you send along the list of features required for PanDA to use Oracle, please? Then we can confirm that our license conforms.
+
+
+\begin{itemize}
+\item Partitioning
+\begin{itemize}
+\item Essential for scalability, particularly as the DB grows over time. Time-wise partitioning ensures that historical data can be accessed promptly and efficiently. This is the only extended functionality used by PanDA itself.
+\end{itemize}
+\item Optimization tools
+\begin{itemize}
+\item Compression, transportable namespaces used in DB optimization, administration
+\end{itemize}
+\item Diagnostics, Tuning
+\begin{itemize}
+\item Valuable for monitoring and maintaining the database.
+\end{itemize}
+\item Oracle Data Guard
+\begin{itemize}
+\item Used for backup. Without it, some alternative robust approach to DB backup would be needed.
+\end{itemize}
+\end{itemize}
+
+CERN is also concerned about minimizing Oracle license costs. One approach they are taking is to use fewer, more powerful servers since the license cost scales with core count but not core power. The ATLAS PanDA production DB will shortly be moving from a 20 core server to a server with 8 slightly more powerful cores. The present server has 512GB memory. Large memory is important to avoid disk reads as much as possible. In the new 8 core server, memory will be increased to 768GB to compensate for the reduced core count. As mentioned below, this configuration provides the system with large headroom for load fluctuations and large spikes.
+
+The ATLAS PanDA Oracle database uses about 75TB to serve PanDA’s 15 years of ATLAS data.
+
+\subsection{Physical resources required for PanDA at Rubin’s scale}
+ATLAS PanDA resource usage:
+
+\begin{itemize}
+\item PanDA server: 9 servers x (8 cores, 16GB RAM, 500GB disk)
+\item JEDI: 9 servers x (8 cores, 16GB RAM, ~500GB disk)
+\begin{itemize}
+\item PanDA/JEDI scale roughly with jobs per day (concurrent job count together with job duration)
+\item Configuration is by design far from a performance ceiling, designed to handle large spikes (cf. below)
+\end{itemize}
+\item PanDA monitoring: 8 servers x (8 cores, 16GB RAM, 80GB) + 1TB shared space for logs storage.
+\begin{itemize}
+\item scales with operating scale (same as PanDA/JEDI servers) together with history (15 years of data, most of the monitoring usage looking at the last ~year of data)
+\end{itemize}
+\item Harvester: ~8 x (4 cores, 8GB RAM, 500GB disk)
+\begin{itemize}
+\item Harvester scales roughly with number of sites
+\end{itemize}
+\item Condor: 6 x (8 cores, 16GB RAM, 100GB disk)
+\begin{itemize}
+\item Condor scales roughly with number of job slots (which scales roughly with concurrent core count)
+\end{itemize}
+\item iDDS: 2 x (8 cores, 16GB RAM, 100GB disk)
+\begin{itemize}
+\item iDDS is relatively new, its scalability in ATLAS is being exercised in the data carousel use case, in production. We’ll learn how it scales in Rubin as we implement and exercise use cases.
+\end{itemize}
+\end{itemize}
+
+We describe here the ATLAS PanDA resource usage. In estimating Rubin resource needs from this, these ATLAS PanDA metrics should be kept in mind:
+
+\begin{itemize}
+\item Steady state operation is currently ~400-450k concurrent cores on average
+\item ATLAS PanDA scales smoothly to 1.4M+ concurrent cores, exercised during HPC spikes
+\item Each job communicates a heartbeat to the PanDA server every 15min
+\item Average job duration is 8 hours and ranges from minutes to a few days
+\begin{itemize}
+\item Longer (within limits) is better for efficiency, system load and limiting DB growth. Ideal duration is a couple of hours. ATLAS has a lot of short O(10min) jobs, but it's preferable to avoid them if possible.
+\end{itemize}
+\item About 1M jobs are processed per day on average, peaking at about 2M
+\item O(1000) users active in the last year, including individual analysis
+\item O(100) global processing sites
+\item About 150 PanDA queues globally
+\end{itemize}
+
+\subsubsection{JEDI in ATLAS and Rubin}
+While JEDI plays a role in the ATLAS Production System Prodsys2 that Rubin will not use, JEDI also provides functionality that Rubin will use. (JEDI basically operates as an integral part of the PanDA core.)  JEDI works with iDDS to provide task-based orchestration of jobs. A ForcedPhotCoaddTask in the processing pipeline may consist of thousands of jobs. Managing and monitoring them as a consolidated payload that is run with different input parameters makes use of JEDI. A hundred-job processing pipeline consists of only 14 tasks (DeblendCoaddSourcesSingleTask, MergeDetectionsTask, DetectCoaddSourcesTask, ….), which makes it significantly easier to debug problems at a particular processing step and control the execution progress.
+
+Graph generation is done using the BPS subsystem of the Rubin middleware. Once the graph is defined, the PanDA plugin in Rubin middleware sends the definition to the iDDS server, and at that point PanDA/JEDI takes care of its execution according to the relationship between jobs/tasks and inputs specified in the Butler repository.
+
+\subsubsection {Condor usage }
+Condor has since PanDA’s inception been its most important workhorse for submitting pilot jobs and harvesting processing resources. The condor service machines handle the submission of PanDA pilots to sites (condor queues) around the world. In recent years Harvester has been developed to abstract PanDA itself away from the many kinds of execution back ends that are now supported, of which condor is one. Harvester manages the condor pilot job submission activities carried out by the condor service machines.
+
+For ATLAS, with over 100 sites most of which use condor, the scale of the condor submission operation is large. For Rubin with far fewer sites it is a smaller task that will basically disappear inside the Harvester service serving Rubin sites.
+
+\subsubsection{Rome  - cores and memory }
+Many ATLAS PanDA components are using 8 core VMs simply because that is the configuration preferred by CERN IT. It is the largest core count configuration CERN supports. From our point of view it would be preferable to have VMs 2x or 4x the size and hence fewer of them. But 128 core/512 GB is a big step in consolidating servers that we have never tried. Horizontal scalability is efficiently supported by having several servers and adding additional as needed. Using many servers also gives -- crucially -- redundancy and resiliency. You don’t want to lose services if a huge server falls over.  Apart from these considerations, we see no reason not to try 128 core/512 GB servers. The servers don't have heavy network traffic or disk I/O requirements. In terms of power, we estimate that a 128 core/512 GB server is roughly commensurate with the power Rubin will need in the near/mid term. We assume some standard virtualization layer will be used with this server and the whole setup will be available as a number of VMs.
+
 
 
 \section {Potential solutions} \label{sec:potential}
