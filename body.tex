@@ -188,6 +188,39 @@ For ATLAS, with over 100 sites most of which use condor, the scale of the condor
 \subsubsection{Rome  - cores and memory }
 Many ATLAS PanDA components are using 8 core VMs simply because that is the configuration preferred by CERN IT. It is the largest core count configuration CERN supports. From our point of view it would be preferable to have VMs 2x or 4x the size and hence fewer of them. But 128 core/512 GB is a big step in consolidating servers that we have never tried. Horizontal scalability is efficiently supported by having several servers and adding additional as needed. Using many servers also gives -- crucially -- redundancy and resiliency. You don’t want to lose services if a huge server falls over.  Apart from these considerations, we see no reason not to try 128 core/512 GB servers. The servers don't have heavy network traffic or disk I/O requirements. In terms of power, we estimate that a 128 core/512 GB server is roughly commensurate with the power Rubin will need in the near/mid term. We assume some standard virtualization layer will be used with this server and the whole setup will be available as a number of VMs.
 
+\subsubsection{Advanced compression}
+Some tables are currently using advanced compression. The largest OLTP compressed tables however are archive tables, i.e. the rows are not updated and data is added by a job in bulk. We could probably get away with basic compression.
+
+\subsubsection{LOBs in the db}
+There are LOBs in the DB, but they are not compressed.
+
+\subsubsection{Transportable namespaces (tablespaces)}
+In ATLAS there are 2 databases for PanDA: the “active” database and the “archival" database.
+\begin{itemize}
+    \item The active database holds the last 3 years of data and is based on fast storage. The DBA creates yearly tablespaces.
+    \item The archival database holds jobs older than 3 years. In practice the data in the archival database is never used and kept only for exceptional cases (e.g. investigation of a very old issue). Storage can be less performant, since the DB is used extremely rarely.
+\end{itemize}
+The tablespaces are copied from the “active” DB to the “archival” DB manually once per year.
+
+Alternative strategies for archival could be possible.
+
+\subsubsection{Data Guard}
+From an application perspective there is no dependency at all on Data Guard or on RAC. These are setups available at CERN to provide highly available services.
+
+Active Data Guard is used for physical standby in case the primary would fail. PanDA only relies on the primary database.
+
+\subsubsection{Oracle server configuration}
+At CERN there is a RAC cluster with three fat nodes. EACH node has 20 core+512GB mem, moving to 8core+768GB mem. Applications are clearly delimited across the nodes so that they don’t overwrite the memory of each other or affect each other. Applications could failover to other nodes in case of node unavailability, but this never happens during normal operations. The assignment during normal operation is:
+\begin{itemize}
+    \item One fat node for PanDA
+    \item One fat node for Rucio (data management)
+    \item One fat node for monitoring applications and various side services
+\end{itemize}
+Old CPU: 2 x Intel Xeon E5-2630 v4 (broadwell, total of 20 physical cores), 3.10 GHz max
+
+New CPU: 2 x Intel Xeon Gold 5222 (cascade lake, total of 8 physical cores), 3.90 GHz max
+
+PanDA developers also use a small clone of the production DB, called INTR (integration) DB, for development. I think it would be TBD by the developers whether there should be an INTR at SLAC or Rubin-focused developers use also the INTR at CERN.
 
 
 \section {Potential solutions} \label{sec:potential}
