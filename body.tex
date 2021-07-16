@@ -222,29 +222,3 @@ New CPU: 2 x Intel Xeon Gold 5222 (cascade lake, total of 8 physical cores), 3.9
 PanDA developers also use a small clone of the production DB, called INTR (integration) DB, for development. I think it would be TBD by the developers whether there should be an INTR at SLAC or Rubin-focused developers use also the INTR at CERN.
 
 
-\section {Dec 2020 Planning}
-\subsection {Potential solutions} \label{sec:potential}
-
-Conceptually this is done in two steps: (a) workflow generation and (b) job execution.
-In step (a) the workflow generation defines executable jobs and job interdependency as a graph.
-In step (b) job execution includes workflow status monitoring, pausing/resuming/killing workflows, debugging/retrying failed jobs, resource usage monitoring, and relevant toolkits to facilitate execution management on a large scale.
-\begin{enumerate}
-\item  ctrl\_bps workflow generation + PanDA-plugin execution tools developed by BNL
-\item ctrl\_bps workflow generation + Condor-plugin execution tools developed by NCSA
-\item ctrl\_bps workflow generation + Pegasus as the execution tools
-\item ctrl\_bps workflow generation tools can't work on IDF, one can use customized scripts to generate workflow for any execution tools.
-\end{enumerate}
-
-
-
-\subsection {Risks and worries}
-These original risks have been accepted or are being addressed.
-\begin{enumerate}
-\item Lack of documentation for PanDA: it is a complex system and will
-  be the heart of processing.. operating for 12 years in this mode is unwise.\label{i:nodoc}
-\item Dependence on an institution or individual because of
-  \ref{i:nodoc}, also suggests the need to spread the expertise more
-  broadly across the team.
-\item Having a LOT of scripting to make a production run of any size
-\item dependence on Oracle: is an open source project would you not like to depend on commercial products furthermore some of us have had bad experience with Oracle.
-\end{enumerate}
