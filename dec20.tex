@@ -1,0 +1,28 @@
+
+\section {Dec 2020 Planning}
+This is preserved for completion as the status of the original ideas in December 2020.
+\subsection {Potential solutions} \label{sec:potential}
+
+Conceptually this is done in two steps: (a) workflow generation and (b) job execution.
+In step (a) the workflow generation defines executable jobs and job interdependency as a graph.
+In step (b) job execution includes workflow status monitoring, pausing/resuming/killing workflows, debugging/retrying failed jobs, resource usage monitoring, and relevant toolkits to facilitate execution management on a large scale.
+\begin{enumerate}
+\item  ctrl\_bps workflow generation + PanDA-plugin execution tools developed by BNL
+\item ctrl\_bps workflow generation + Condor-plugin execution tools developed by NCSA
+\item ctrl\_bps workflow generation + Pegasus as the execution tools
+\item ctrl\_bps workflow generation tools can't work on IDF, one can use customized scripts to generate workflow for any execution tools.
+\end{enumerate}
+
+
+
+\subsection {Risks and worries}
+These original risks have been accepted or are being addressed.
+\begin{enumerate}
+\item Lack of documentation for PanDA: it is a complex system and will
+  be the heart of processing.. operating for 12 years in this mode is unwise.\label{i:nodoc}
+\item Dependence on an institution or individual because of
+  \ref{i:nodoc}, also suggests the need to spread the expertise more
+  broadly across the team.
+\item Having a LOT of scripting to make a production run of any size
+\item dependence on Oracle: is an open source project would you not like to depend on commercial products furthermore some of us have had bad experience with Oracle.
+\end{enumerate}

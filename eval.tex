@@ -1,0 +1,55 @@
+\subsubsection{July 2021 Evaluation}
+A small group met on 15 July 2021 to asses the status of PanDA on the IDF and going forward.
+We  concluded  that PanDA is functioning on IDF, though it certainly needs some more work.
+We definitely will use this setup for DP0.2.
+When DP0.2 is  successful we will endorse PanDA for sue  through DR1.
+As a note DR1 is a general decision point for many technologies in line with our Rubin policy of keeping technology current operations.
+
+On the specific points in \secref{sec:reqs}:
+\begin{enumerate}
+\item Documentation
+\begin{itemize}
+\item PanDA docs now appear on \url{https://panda-wms.readthedocs.io/en/latest/}
+\item The User Guide in progress: \jira{DM-30805} see \url{https://panda-wms.readthedocs.io/en/latest/client/monitoring.html}
+\item Panda for Rubin document in progress: \citeds{DMTN-168}
+\item \href{https://docs.google.com/document/d/1J0Dxe_TJoIpWQm_izBY4Cz6mWkgLCVTZB6pZxkjS0Gg/edit}{ Sergey’s tutorial (in progress, to be turned into a dmtn) }
+\end{itemize}
+\item Workflow monitoring
+\begin{itemize}
+\item Currently at https://panda-doma.cern.ch/ site - it is difficult to understand.
+\item Customization is possible but not demonstrated. Might want more campaign management inputs before customizing.
+\item The design allows other tools to be built on top of it.
+\item We need more training on using this monitoring site
+\end{itemize}
+\item Restart
+\begin{itemize}
+\item  There are automatic retries for transient issues.
+\item Any changes to the workflow graph means a new graph needs to be made, submitted, and re-processed;  a BPS constraint for now PanDA doe snot really understand the DAG.
+\begin{itemize}
+\item Butler can recreate a graph removing the already run parts
+\item PanDA can rerun the entire workflow - the jobs already done will start up and finish instantly (with start up time).
+\end{itemize}
+
+\end{itemize}
+\item Logstash
+\begin{itemize}
+\item \emph{ Not done. }
+\item The payload logs are now stored in a Google bucket. Work is needed to integrate with Google's log analysis tooling.
+
+\end{itemize}
+\item Troubleshooting failed jobs
+\begin{itemize}
+\item Triaging is done on the monitoring site.
+\item Again we need more training on using the monitoring site for the execution team
+\end{itemize}
+\item  DOMA @ CERN  - IN2P3 bonus.
+\begin{itemize}
+\item IN2P3 setup was not attempted.  DOMA@CERN is used.
+\item CERN test PanDA server was a bit overloaded by the traffic (many small jobs), but has been replaced by a beefier machine which should fix the problem.
+\end{itemize}
+\end{enumerate}
+
+In addition to the above we note positively Jim Chiang has been successful in running Camera BPS jobs at SLAC via the same PanDA server as IDF
+which was not in the original scope.
+
+

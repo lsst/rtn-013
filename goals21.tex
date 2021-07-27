@@ -1,0 +1,50 @@
+\section{Goals and priorities for 2021}\label{sec:goals21}
+A time line for these items should be agreed with BNL.
+Agreed items  may be added to \jira{PREOPS-87 } the EPIC for DP0.2 processing.
+
+\subsection {High priority items } \label{sec:high}
+\begin{enumerate}
+\item Execution Butler integration. This is a blocker for DP0.2. (P0)
+\item Documentations \& training (P1) : we need operator training,  what training do Atlas operators receive?
+\item Allow panda workflow submission from data-int.lsst.cloud RSP environment (P1)
+\item Setup Logstash or equivalent (P1) - decide on :
+\begin{itemize}
+\item Set up the ELK stack on Google
+\item Or use Google-only Tooling. This might be the quickest but less portable.
+\end{itemize}
+\item BPS panda plug-in integration and refactoring (P1)
+\begin{itemize}
+\item Env var expansion, configuration file organization, etc may not be consistent with other BPS plugins.
+\item Need to support BPS commands rather than custom scripts for bps report/cancel
+\item Less hacks in general ..
+\item BPS needs to expand its commands, e.g. retry, to allow panda integration
+\item Needs time with Michelle Gower and Sergey working together to understand generic vs specific code.
+\end{itemize}
+\item BPS needs to support small job clustering, otherwise the panda server will be slow with small jobs (as we refused panda-specific workarounds). This can be a serious performance hit for DP0.2. (P1)
+\begin{itemize}
+\item This also needs work from DM side (Nate or Michelle)
+\end{itemize}
+
+\end{enumerate}
+
+\subsection {Lower priority items (P2)}
+Still needed and important but not as important as \secref{sec:high}:
+\begin{enumerate}
+\item Move the PanDA server from CERN to SLAC  (P2)
+\begin{itemize}
+\item This includes an Architecture review/tuning.  Google/Burwood may help if we deem that useful.
+\end{itemize}
+\item Attempt multi-site setup (P2)
+\begin{itemize}
+\item USDF, IDF, IN2P3, UKDF
+\end{itemize}
+\item Authentication. Currently at least two separate identities are needed for each user. (P2)
+\begin{itemize}
+\item Submission VM: this won't exist once we can submit from data-int
+\item Panda-DOMA: integration work w/ Rubin auth is needed
+\end{itemize}
+\item We need a Support plan agreed with BNL(P2):
+\item Currently we have only one Sergey who knows all things.  We are dead if Sergey goes on vacation.  Shuwei needs to become a full backup.
+\item DMTN-168 needs an section on how IDF is setup (GKE etc) so we can better understand it.
+\item On IDF, if  we expect more tuning, e.g. on kubernetes setup, we can continue to use Burwood. This is ok at least for DP0.2 but its not free.
+\end{enumerate}
